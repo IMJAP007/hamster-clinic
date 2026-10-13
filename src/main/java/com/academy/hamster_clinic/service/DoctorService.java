@@ -29,7 +29,7 @@ public class DoctorService {
     }
 
     public Doctor getById(Long id) {
-        return doctorRepository.findById(id) .orElseThrow(() -> new ResourceNotFoundException("Врач не найден: id = " + id));
+        return doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Врач не найден: id = " + id));
     }
 
     public List<Doctor> list() {
