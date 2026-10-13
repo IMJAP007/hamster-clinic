@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.academy.hamster_clinic.dto.OwnerRequest;
+import com.academy.hamster_clinic.dto.OwnerResponse;
 import com.academy.hamster_clinic.entity.Owner;
 import com.academy.hamster_clinic.exception.BusinessException;
 import com.academy.hamster_clinic.exception.ResourceNotFoundException;
@@ -19,40 +21,58 @@ public class OwnerService {
     private final OwnerRepository ownerRepository;
 
     @Transactional
-    public Owner create(Owner owner){
-        if (owner.getEmail() != null && ownerRepository.existsByEmail(owner.getEmail())) {
-            throw new BusinessException("Хозяин с таким email уже существует: " + owner.getEmail());
+    public OwnerResponse create(OwnerRequest req){
+        if (req.email() != null && ownerRepository.existsByEmail(req.email())) {
+            throw new BusinessException("Хозяин с таким email уже существует: " + req.email());
         }
 
-        return ownerRepository.save(owner);
+        Owner o = new Owner();
+        o.setFullName(req.fullName());
+        o.setPhone(req.phone());
+        o.setEmail(req.email());
+        
+        return toResponse(ownerRepository.save(o));
     }
 
-    public Owner getById(Long id) {
-        return ownerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Хозяин не найден: id = " + id));
+    public OwnerResponse get(Long id) {
+        return toResponse(findOrThrow(id));
     }
 
-    public List<Owner> list() {
-        return ownerRepository.findAllByOrderByFullNameAsc();
+    public List<OwnerResponse> list() {
+        return ownerRepository.findAllByOrderByFullNameAsc().stream().map(OwnerService::toResponse).toList();
     }
 
     @Transactional
-    public Owner update(Long id, String fullName, String phone, String email) {
-        Owner owner = getById(id);
-        owner.setFullName(fullName);
-        owner.setPhone(phone);
-        owner.setEmail(email);
+    public OwnerResponse update(Long id, OwnerRequest req) {
+        Owner o = findOrThrow(id);
+
+        if (req.email() != null && !req.email().equals(o.getEmail()) && ownerRepository.existsByEmail(req.email())) {
+            throw new BusinessException("Email уже занят: " + req.email());
+        }
+
+        o.setFullName(req.fullName());
+        o.setPhone(req.phone());
+        o.setEmail(req.email());
         
-        return owner;
+        return toResponse(o);
     }
 
     @Transactional 
     public void delete(Long id) {
-        Owner owner = getById(id);
+        Owner o = findOrThrow(id);
 
-        if (!owner.getHamsters().isEmpty()) {
+        if (!o.getHamsters().isEmpty()) {
             throw new BusinessException("Нельзя удалить хозяина, у которого есть хомяки");
         }
 
-        ownerRepository.delete(owner);
+        ownerRepository.delete(o);
+    }
+
+    private Owner findOrThrow(Long id) {
+        return ownerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Хозяин не найден: id = " + id));
+    }
+
+    private static OwnerResponse toResponse(Owner o) {
+        return new OwnerResponse(o.getId(), o.getFullName(), o.getPhone(), o.getEmail(), o.getCreatedAt());
     }
 }

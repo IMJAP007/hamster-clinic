@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.academy.hamster_clinic.dto.DoctorRequest;
+import com.academy.hamster_clinic.dto.DoctorResponse;
 import com.academy.hamster_clinic.entity.Doctor;
 import com.academy.hamster_clinic.exception.BusinessException;
 import com.academy.hamster_clinic.exception.ResourceNotFoundException;
@@ -20,43 +22,57 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
 
     @Transactional
-    public Doctor create(Doctor doctor) {
-        if (doctor.getEmail() != null && doctorRepository.existsByEmail(doctor.getEmail())) {
-            throw new BusinessException("Врач с таким email уже существует: " + doctor.getEmail());
+    public DoctorResponse create(DoctorRequest req) {
+        if (req.email() != null && doctorRepository.existsByEmail(req.email())) {
+            throw new BusinessException("Врач с email уже существует: " + req.email());
         }
         
-        return doctorRepository.save(doctor);
+        Doctor d = new Doctor();
+        
+        d.setFullName(req.fullName());
+        d.setSpecialty(req.specialty());
+        d.setPhone(req.phone());
+        d.setEmail(req.email());
+        
+        return toResponse(doctorRepository.save(d));
     }
 
-    public Doctor getById(Long id) {
-        return doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Врач не найден: id = " + id));
+    public DoctorResponse get(Long id) {
+        return toResponse(findOrThrow(id));
     }
 
-    public List<Doctor> list() {
-        return doctorRepository.findAll();
-    }
-
-    public List<Doctor> listBySpecialty(String specialty) {
-        return doctorRepository.findBySpecialtyIgnoreCase(specialty);
+    public List<DoctorResponse> list(String specialty) {
+        List<Doctor> doctors = (specialty == null || specialty.isBlank()) ? doctorRepository.findAll() : doctorRepository.findBySpecialtyIgnoreCase(specialty);
+        
+        return doctors.stream().map(DoctorService::toResponse).toList();
     }
 
     @Transactional
-    public Doctor update(Long id, String fullName, String specialty, String phone, String email) {
-        Doctor doctor = getById(id);
-        doctor.setFullName(fullName);
-        doctor.setSpecialty(specialty);
-        doctor.setPhone(phone);
-        doctor.setEmail(email);
+    public DoctorResponse update(Long id, DoctorRequest req) {
+        Doctor d = findOrThrow(id);
         
-        return doctor;
+        if (req.email() != null && !req.email().equals(d.getEmail()) && doctorRepository.existsByEmail(req.email())) {
+            throw new BusinessException("Email уже занят: " + req.email());
+        }
+        
+        d.setFullName(req.fullName());
+        d.setSpecialty(req.specialty());
+        d.setPhone(req.phone());
+        d.setEmail(req.email());
+        
+        return toResponse(d);
     }
 
     @Transactional
     public void delete(Long id) {
-        if (!doctorRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Врач не найден: id = " + id);
-        }
-        
-        doctorRepository.deleteById(id);
+        doctorRepository.delete(findOrThrow(id));
+    }
+
+    private Doctor findOrThrow(Long id) {
+        return doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Врач не найден: id = " + id));
+    }
+
+    private static DoctorResponse toResponse(Doctor d) {
+        return new DoctorResponse(d.getId(), d.getFullName(), d.getSpecialty(), d.getPhone(), d.getEmail(), d.getCreatedAt());
     }
 }

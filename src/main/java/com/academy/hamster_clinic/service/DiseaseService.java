@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.academy.hamster_clinic.dto.DiseaseRequest;
+import com.academy.hamster_clinic.dto.DiseaseResponse;
 import com.academy.hamster_clinic.entity.Disease;
 import com.academy.hamster_clinic.exception.BusinessException;
 import com.academy.hamster_clinic.exception.ResourceNotFoundException;
@@ -20,22 +22,30 @@ public class DiseaseService {
     private final DiseaseRepository diseaseRepository;
 
     @Transactional
-    public Disease create(String name) {
-        if (diseaseRepository.existsByNameIgnoreCase(name)) {
-            throw new BusinessException("Болезнь уже существует: " + name);
+    public DiseaseResponse create(DiseaseRequest req) {
+        if (diseaseRepository.existsByNameIgnoreCase(req.name())) {
+            throw new BusinessException("Болезнь уже существует: " + req.name());
         }
-
-        Disease disease = new Disease();
-        disease.setName(name);
         
-        return diseaseRepository.save(disease);
+        Disease d = new Disease();
+        d.setName(req.name());
+        
+        return toResponse(diseaseRepository.save(d));
     }
 
-    public Disease getById(Long id) {
+    public DiseaseResponse get(Long id) {
+        return toResponse(findOrThrow(id));
+    }
+
+    public List<DiseaseResponse> list() {
+        return diseaseRepository.findAll().stream().map(DiseaseService::toResponse).toList();
+    }
+
+    private Disease findOrThrow(Long id) {
         return diseaseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Болезнь не найдена: id = " + id));
     }
 
-    public List<Disease> list() {
-        return diseaseRepository.findAll();
+    private static DiseaseResponse toResponse(Disease d) {
+        return new DiseaseResponse(d.getId(), d.getName());
     }
 }
