@@ -49,16 +49,20 @@ CREATE TABLE diseases (
 CREATE TABLE appointments (
     id BIGSERIAL PRIMARY KEY,
     doctor_id BIGINT NOT NULL,
+    owner_id BIGINT NOT NULL,
     hamster_id BIGINT NOT NULL,
     appointment_date TIMESTAMP NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     
     CONSTRAINT fk_appointments_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id) ON DELETE RESTRICT,
+    CONSTRAINT fk_appointments_owner FOREIGN KEY (owner_id) REFERENCES owners (id) ON DELETE RESTRICT,
     CONSTRAINT fk_appointments_hamster FOREIGN KEY (hamster_id) REFERENCES hamsters (id) ON DELETE CASCADE,
     CONSTRAINT uq_appointments_doctor_datetime UNIQUE (doctor_id, appointment_date)
 );
 
 CREATE INDEX idx_appointments_hamster_id ON appointments (hamster_id);
+CREATE INDEX idx_appointments_doctor_id ON appointments (doctor_id);
+CREATE INDEX idx_appointments_owner_id ON appointments (owner_id);
 
 
 -- Болезни хомяков
