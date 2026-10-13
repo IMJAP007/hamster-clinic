@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
     
-    Optional<Owner> findByEmain(String email);
+    Optional<Owner> findByEmail(String email);
     boolean existsByEmail(String email);
     List<Owner> findAllByOrderByFullNameAsc();
 }
