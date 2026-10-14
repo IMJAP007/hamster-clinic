@@ -9,7 +9,7 @@
 1. После клонировния репозитория переименуйте файл `.env.example` в `.env`. При желании можете поменять пароль к БД в поле `POSTGRES_PASSWORD`
 2. Поднимите БД PostgreSql через команду (выполнять в корне проекта):
 ```bash
-docker compose up
+docker compose up -d
 ```
 3. Запустите программу с помощью:
 ```bash
@@ -48,4 +48,17 @@ curl -X POST http://localhost:8080/api/hamsters \
 curl -X POST http://localhost:8080/api/appointments \
   -H "Content-Type: application/json" \
   -d '{"doctorId":1,"ownerId":1,"hamsterId":1,"appointmentDate":"2025-06-01T10:30:00"}'
+```
+
+#### Остановка
+1. Остановите программу с помощью сочетания клавиш: `CTRL + C`
+2. Опустите БД через:
+```bash
+# с сохранением данных
+docker compose down
+```
+
+```bash
+# без сохранения данных
+docker compose down -v
 ```
