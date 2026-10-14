@@ -18,39 +18,47 @@ import com.academy.hamster_clinic.dto.DoctorRequest;
 import com.academy.hamster_clinic.dto.DoctorResponse;
 import com.academy.hamster_clinic.service.DoctorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
+@Tag(name = "Врачи", description = "Операции с врачами")
 public class DoctorController {
 
     private final DoctorService doctorService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать врача", description = "Создаёт нового врача. Email должен быть уникальным.")
     public DoctorResponse create(@RequestBody @Valid DoctorRequest req) {
         return doctorService.create(req);
     }
 
     @GetMapping
+    @Operation(summary = "Вывести список врачей", description = "Можно сортировать по специальности.")
     public List<DoctorResponse> list(@RequestParam (required = false) String specialty) {
         return doctorService.list(specialty);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Вывести конкретного врача", description = "По ID")
     public DoctorResponse get(@PathVariable Long id) {
         return doctorService.get(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Обновить данные конкретного врача", description = "По ID")
     public DoctorResponse update(@PathVariable Long id, @RequestBody @Valid DoctorRequest req) {
         return doctorService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Удалить врача", description = "По ID")
     public void delete(@PathVariable Long id) {
         doctorService.delete(id);
     }

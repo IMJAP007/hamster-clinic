@@ -15,28 +15,34 @@ import com.academy.hamster_clinic.dto.DiseaseRequest;
 import com.academy.hamster_clinic.dto.DiseaseResponse;
 import com.academy.hamster_clinic.service.DiseaseService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/diseases")
 @RequiredArgsConstructor
+@Tag(name = "Болезни", description = "Операции с болезнями")
 public class DiseaseController {
 
     private final DiseaseService diseaseService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать болезнь", description = "Создаёт новую болезнь")
     public DiseaseResponse create(@RequestBody @Valid DiseaseRequest req) {
         return diseaseService.create(req);
     }
 
     @GetMapping
+    @Operation(summary = "Вывести список болезней")
     public List<DiseaseResponse> list() {
         return diseaseService.list();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Вывести конкретную болезнь", description = "По ID")
     public DiseaseResponse get(@PathVariable Long id) {
         return diseaseService.get(id);
     }

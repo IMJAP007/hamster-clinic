@@ -17,6 +17,8 @@ import com.academy.hamster_clinic.dto.OwnerRequest;
 import com.academy.hamster_clinic.dto.OwnerResponse;
 import com.academy.hamster_clinic.service.OwnerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -24,32 +26,38 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/owners")
 @RequiredArgsConstructor
+@Tag(name = "Хозяева", description = "Операции с владельцами хомяков")
 public class OwnerControler {
     
     private final OwnerService ownerService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать хозяина", description = "Создаёт нового хозяина. Email должен быть уникальным.")
     public OwnerResponse create(@RequestBody @Valid OwnerRequest req) {
         return ownerService.create(req);
     }
 
     @GetMapping
+    @Operation(summary = "Вывести владельцев", description = "Выводит список всех существующих владельцев.")
     public List<OwnerResponse> get() {
         return ownerService.list();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Получить хозяина по ID")
     public OwnerResponse get(@PathVariable Long id) {
         return ownerService.get(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Обновить данные о владельце", description = "Получает владельца по ID и обновляет его данные.")
     public OwnerResponse update(@PathVariable Long id, @RequestBody @Valid OwnerRequest req) {
         return ownerService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить владельца", description = "Получает владельца по ID и оудаляет его.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         ownerService.delete(id);

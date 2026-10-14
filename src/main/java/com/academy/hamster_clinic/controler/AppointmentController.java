@@ -17,34 +17,41 @@ import com.academy.hamster_clinic.dto.AppointmentRequest;
 import com.academy.hamster_clinic.dto.AppointmentResponse;
 import com.academy.hamster_clinic.service.AppointmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
+@Tag(name = "Записи", description = "Операции с записями")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать запись", description = "Создаёт новую запись. Нужен Врач, Хозяин, Хомяк хозяина, Врач на назначенное время должен быть свободен")
     public AppointmentResponse create(@RequestBody @Valid AppointmentRequest req) {
         return appointmentService.create(req);
     }
 
     @GetMapping
+    @Operation(summary = "Выводит список записей", description = "Можно фильтровать по хомяку и/ или врачу")
     public List<AppointmentResponse> list(@RequestParam(required = false) Long doctorId, @RequestParam(required = false) Long hamsterId) {
         return appointmentService.list(doctorId, hamsterId);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Выводит конкретную запись", description = "По ID")
     public AppointmentResponse get(@PathVariable Long id) {
         return appointmentService.get(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Удаляет запись", description = "По ID")
     public void cancel(@PathVariable Long id) {
         appointmentService.cancel(id);
     }

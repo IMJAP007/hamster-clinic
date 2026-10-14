@@ -16,6 +16,11 @@ docker compose up -d
 ./mvnw spring-boot:run
 ```
 
+#### Swagger-UI:
+Путь: http://localhost:8080/swagger-ui.html
+
+![swagger](screenshots/swagger.png)
+
 #### Примеры REST запросов:
 ```bash
 # Создать хозяина
