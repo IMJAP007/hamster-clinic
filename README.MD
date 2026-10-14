@@ -16,3 +16,36 @@ docker compose up
 ./mvnw spring-boot:run
 ```
 
+#### Примеры REST запросов:
+```bash
+# Создать хозяина
+curl -X POST http://localhost:8080/api/owners \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"Кузнецова Анна","phone":"+7-901-100-10-10","email":"anna@example.com"}'
+```
+
+```bash
+# Список
+curl http://localhost:8080/api/owners
+```
+
+```bash
+# Создать врача
+curl -X POST http://localhost:8080/api/doctors \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"Иванов Иван","specialty":"Терапевт","email":"ivanov@vet.example"}'
+```
+
+```bash
+# Создать хомяка, принадлежащего хозяину с id = 1
+curl -X POST http://localhost:8080/api/hamsters \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Бублик","ownerId":1}'
+```
+
+```bash
+# Запись на приём
+curl -X POST http://localhost:8080/api/appointments \
+  -H "Content-Type: application/json" \
+  -d '{"doctorId":1,"ownerId":1,"hamsterId":1,"appointmentDate":"2025-06-01T10:30:00"}'
+```
