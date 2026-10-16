@@ -16,6 +16,7 @@ import com.academy.hamster_clinic.dto.DiseaseResponse;
 import com.academy.hamster_clinic.service.DiseaseService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class DiseaseController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Вывести конкретную болезнь", description = "По ID")
-    public DiseaseResponse get(@PathVariable Long id) {
+    public DiseaseResponse get(@Parameter(description = "ID болезни") @PathVariable Long id) {
         return diseaseService.get(id);
     }
 }

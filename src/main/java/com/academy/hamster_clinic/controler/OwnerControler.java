@@ -18,6 +18,7 @@ import com.academy.hamster_clinic.dto.OwnerResponse;
 import com.academy.hamster_clinic.service.OwnerService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,20 +47,20 @@ public class OwnerControler {
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить хозяина по ID")
-    public OwnerResponse get(@PathVariable Long id) {
+    public OwnerResponse get(@Parameter(description = "ID владельца") @PathVariable Long id) {
         return ownerService.get(id);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Обновить данные о владельце", description = "Получает владельца по ID и обновляет его данные.")
-    public OwnerResponse update(@PathVariable Long id, @RequestBody @Valid OwnerRequest req) {
+    public OwnerResponse update(@Parameter(description = "ID владельца") @PathVariable Long id, @RequestBody @Valid OwnerRequest req) {
         return ownerService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить владельца", description = "Получает владельца по ID и оудаляет его.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@Parameter(description = "ID владельца") @PathVariable Long id) {
         ownerService.delete(id);
     }
     

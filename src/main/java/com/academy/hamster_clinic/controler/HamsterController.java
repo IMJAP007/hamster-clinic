@@ -20,6 +20,7 @@ import com.academy.hamster_clinic.dto.HamsterResponse;
 import com.academy.hamster_clinic.service.HamsterService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,26 +42,26 @@ public class HamsterController {
 
     @GetMapping
     @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по владельцу")
-    public List<HamsterResponse> list(@RequestParam(required = false) Long ownerId) {
+    public List<HamsterResponse> list(@Parameter(description = "ID владельца") @RequestParam(required = false) Long ownerId) {
         return hamsterService.list(ownerId);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Вывести хомяка", description = "По ID")
-    public HamsterResponse get(@PathVariable Long id) {
+    public HamsterResponse get(@Parameter(description = "ID хомяка") @PathVariable Long id) {
         return hamsterService.get(id);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Переименовать хомяка", description = "По ID")
-    public HamsterResponse rename(@PathVariable Long id, @RequestBody @Valid HamsterRenameRequest req) {
+    public HamsterResponse rename(@Parameter(description = "ID хомяка") @PathVariable Long id, @RequestBody @Valid HamsterRenameRequest req) {
         return hamsterService.rename(id, req);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить хомяка", description = "По ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@Parameter(description = "ID хомяка") @PathVariable Long id) {
         hamsterService.delete(id);
     }
 }
