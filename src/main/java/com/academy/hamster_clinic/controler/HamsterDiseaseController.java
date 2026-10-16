@@ -17,35 +17,43 @@ import com.academy.hamster_clinic.dto.HamsterDiseaseRequest;
 import com.academy.hamster_clinic.dto.HamsterDiseaseResponse;
 import com.academy.hamster_clinic.service.HamsterDiseaseService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/hamster-diseases")
 @RequiredArgsConstructor
+@Tag(name = "Болезни хомяков", description = "Тут хомякам ставятся диагнозы")
 public class HamsterDiseaseController {
 
     private final HamsterDiseaseService hamsterDiseaseService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создать запись о диагнозе", description = "Создаёт запись об установке диагноза хомяку. Нужен хомяк, больезнь и дата установки диагноза")
     public HamsterDiseaseResponse create(@RequestBody @Valid HamsterDiseaseRequest req) {
         return hamsterDiseaseService.create(req);
     }
 
     @GetMapping
-    public List<HamsterDiseaseResponse> list(@RequestParam(required = false) Long hamsterId, @RequestParam(required = false) Long diseaseId) {
+    @Operation(summary = "Вывести список записей о болезнях", description = "Можно сортировать по хомяку или по болезни")
+    public List<HamsterDiseaseResponse> list(@Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId, @Parameter(description = "ID болезни") @RequestParam(required = false) Long diseaseId) {
         return hamsterDiseaseService.list(hamsterId, diseaseId);
     }
 
     @GetMapping("/{id}")
-    public HamsterDiseaseResponse get(@PathVariable Long id) {
+    @Operation(summary = "Вывести конкретную запись", description = "По ID")
+    public HamsterDiseaseResponse get(@Parameter(description = "ID записи") @PathVariable Long id) {
         return hamsterDiseaseService.get(id);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить запись", description = "По ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@Parameter(description = "ID записи") @PathVariable Long id) {
         hamsterDiseaseService.delete(id);
     }
 }

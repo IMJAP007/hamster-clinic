@@ -69,10 +69,10 @@ public class AppointmentService {
         
         if (doctorId != null) {
             list = appointmentRepository.findByDoctorIdOrderByAppointmentDateAsc(doctorId);
-        } 
+        }
         else if (hamsterId != null) {
             list = appointmentRepository.findByHamsterIdOrderByAppointmentDateAsc(hamsterId);
-        } 
+        }
         else {
             list = appointmentRepository.findAll();
         }
