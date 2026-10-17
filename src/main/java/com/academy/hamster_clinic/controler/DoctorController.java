@@ -39,10 +39,16 @@ public class DoctorController {
         return doctorService.create(req);
     }
 
+    // @GetMapping
+    // @Operation(summary = "Вывести список врачей", description = "Можно сортировать по специальности.")
+    // public List<DoctorResponse> list(@Parameter(description = "Специальнось врача") @RequestParam (required = false) String specialty) {
+    //     return doctorService.list(specialty);
+    // }
+
     @GetMapping
-    @Operation(summary = "Вывести список врачей", description = "Можно сортировать по специальности.")
-    public List<DoctorResponse> list(@Parameter(description = "Специальнось врача") @RequestParam (required = false) String specialty) {
-        return doctorService.list(specialty);
+    @Operation(summary = "Вывести список врачей", description = "Можно с фильтрцией по ФИО")
+    public List<DoctorResponse> filterByFullName(@Parameter(description = "ФИО Врача") @RequestParam (required = false) String fullName) {
+        return doctorService.searchByFullName(fullName);
     }
 
     @GetMapping("/{id}")

@@ -47,6 +47,12 @@ public class DoctorService {
         return doctors.stream().map(DoctorService::toResponse).toList();
     }
 
+    public List<DoctorResponse> searchByFullName(String fullName) {
+        List<Doctor> doctors = (fullName == null || fullName.isBlank()) ? doctorRepository.findAll() : doctorRepository.findByFullNameContaining(fullName);
+
+        return doctors.stream().map(DoctorService::toResponse).toList();
+    }
+
     @Transactional
     public DoctorResponse update(Long id, DoctorRequest req) {
         Doctor d = findOrThrow(id);

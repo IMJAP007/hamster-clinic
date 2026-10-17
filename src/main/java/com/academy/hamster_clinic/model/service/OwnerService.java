@@ -43,6 +43,12 @@ public class OwnerService {
         return ownerRepository.findAllByOrderByFullNameAsc().stream().map(OwnerService::toResponse).toList();
     }
 
+    public List<OwnerResponse> findByFullName(String fullName) {
+        List<Owner> owners = (fullName == null || fullName.isBlank()) ? ownerRepository.findAll() : ownerRepository.findByFullNameContaining(fullName);
+
+        return owners.stream().map(OwnerService::toResponse).toList();
+    }
+
     @Transactional
     public OwnerResponse update(Long id, OwnerRequest req) {
         Owner o = findOrThrow(id);
