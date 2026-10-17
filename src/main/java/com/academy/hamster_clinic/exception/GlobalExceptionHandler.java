@@ -11,7 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.academy.hamster_clinic.dto.ErrorResponse;
+import com.academy.hamster_clinic.model.dto.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 

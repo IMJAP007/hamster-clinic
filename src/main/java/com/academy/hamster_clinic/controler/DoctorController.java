@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.academy.hamster_clinic.dto.DoctorRequest;
-import com.academy.hamster_clinic.dto.DoctorResponse;
-import com.academy.hamster_clinic.service.DoctorService;
+import com.academy.hamster_clinic.model.dto.DoctorRequest;
+import com.academy.hamster_clinic.model.dto.DoctorResponse;
+import com.academy.hamster_clinic.model.service.DoctorService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

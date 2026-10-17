@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.academy.hamster_clinic.dto.HamsterRenameRequest;
-import com.academy.hamster_clinic.dto.HamsterRequest;
-import com.academy.hamster_clinic.dto.HamsterResponse;
-import com.academy.hamster_clinic.service.HamsterService;
+import com.academy.hamster_clinic.model.dto.HamsterRenameRequest;
+import com.academy.hamster_clinic.model.dto.HamsterRequest;
+import com.academy.hamster_clinic.model.dto.HamsterResponse;
+import com.academy.hamster_clinic.model.service.HamsterService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
