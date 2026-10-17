@@ -40,8 +40,12 @@ public class AppointmentController {
 
     @GetMapping
     @Operation(summary = "Выводит список записей", description = "Можно фильтровать по хомяку или врачу")
-    public List<AppointmentResponse> list(@Parameter(description = "ID доктора") @RequestParam(required = false) Long doctorId, @Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId) {
-        return appointmentService.list(doctorId, hamsterId);
+    public List<AppointmentResponse> list(
+        @Parameter(description = "ID доктора") @RequestParam(required = false) Long doctorId, 
+        @Parameter(description = "Id хозяина") @RequestParam(required = false) Long ownerId,
+        @Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId
+    ) {
+        return appointmentService.list(doctorId, hamsterId, ownerId);
     }
 
     @GetMapping("/{id}")

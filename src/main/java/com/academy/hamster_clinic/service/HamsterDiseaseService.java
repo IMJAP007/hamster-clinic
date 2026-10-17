@@ -53,18 +53,20 @@ public class HamsterDiseaseService {
     }
 
     public List<HamsterDiseaseResponse> list(Long hamsterId, Long diseaseId) {
-        List<HamsterDisease> list;
-        if (hamsterId != null) {
-            list = hamsterDiseaseRepository.findByHamsterIdOrderByDiagnosedAtDesc(hamsterId);
-        }
-        else if (diseaseId != null) {
-            list = hamsterDiseaseRepository.findByDiseaseId(diseaseId);
-        }
-        else {
-            list = hamsterDiseaseRepository.findAll();
-        }
+        // List<HamsterDisease> list;
+        // if (hamsterId != null) {
+        //     list = hamsterDiseaseRepository.findByHamsterIdOrderByDiagnosedAtDesc(hamsterId);
+        // }
+        // else if (diseaseId != null) {
+        //     list = hamsterDiseaseRepository.findByDiseaseId(diseaseId);
+        // }
+        // else {
+        //     list = hamsterDiseaseRepository.findAll();
+        // }
         
-        return list.stream().map(HamsterDiseaseService::toResponse).toList();
+        // return list.stream().map(HamsterDiseaseService::toResponse).toList();
+
+        return hamsterDiseaseRepository.findByFilters(hamsterId, diseaseId).stream().map(HamsterDiseaseService::toResponse).toList();
     }
 
     @Transactional
