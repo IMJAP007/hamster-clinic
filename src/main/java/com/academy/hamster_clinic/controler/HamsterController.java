@@ -40,10 +40,16 @@ public class HamsterController {
         return hamsterService.create(req);
     }
 
+    // @GetMapping
+    // @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по владельцу")
+    // public List<HamsterResponse> list(@Parameter(description = "ID владельца") @RequestParam(required = false) Long ownerId) {
+    //     return hamsterService.list(ownerId);
+    // }
+
     @GetMapping
-    @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по владельцу")
-    public List<HamsterResponse> list(@Parameter(description = "ID владельца") @RequestParam(required = false) Long ownerId) {
-        return hamsterService.list(ownerId);
+    @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по ФИО владельца")
+    public List<HamsterResponse> list(@Parameter(description = "ФИО владельца") @RequestParam(required = false) String ownerFullName) {
+        return hamsterService.list(ownerFullName);
     }
 
     @GetMapping("/{id}")

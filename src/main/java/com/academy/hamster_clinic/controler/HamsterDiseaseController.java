@@ -38,10 +38,21 @@ public class HamsterDiseaseController {
         return hamsterDiseaseService.create(req);
     }
 
+    // @GetMapping
+    // @Operation(summary = "Вывести список записей о болезнях", description = "Можно сортировать по хомяку или по болезни")
+    // public List<HamsterDiseaseResponse> list(@Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId, @Parameter(description = "ID болезни") @RequestParam(required = false) Long diseaseId) {
+    //     return hamsterDiseaseService.list(hamsterId, diseaseId);
+    // }
+
     @GetMapping
-    @Operation(summary = "Вывести список записей о болезнях", description = "Можно сортировать по хомяку или по болезни")
-    public List<HamsterDiseaseResponse> list(@Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId, @Parameter(description = "ID болезни") @RequestParam(required = false) Long diseaseId) {
-        return hamsterDiseaseService.list(hamsterId, diseaseId);
+    @Operation(summary = "Вывести список записей о болезнях",
+           description = "Фильтрация по имени хомяка и названию болезни")
+    public List<HamsterDiseaseResponse> list(
+        @Parameter(description = "Имя хомяка")
+        @RequestParam(required = false) String hamsterName,
+        @Parameter(description = "Название болезни")
+        @RequestParam(required = false) String diseaseName) {
+        return hamsterDiseaseService.list(hamsterName, diseaseName);
     }
 
     @GetMapping("/{id}")

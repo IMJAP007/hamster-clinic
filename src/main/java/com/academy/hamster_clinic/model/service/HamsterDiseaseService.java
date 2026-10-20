@@ -52,21 +52,30 @@ public class HamsterDiseaseService {
         return toResponse(findOrThrow(id));
     }
 
-    public List<HamsterDiseaseResponse> list(Long hamsterId, Long diseaseId) {
-        // List<HamsterDisease> list;
-        // if (hamsterId != null) {
-        //     list = hamsterDiseaseRepository.findByHamsterIdOrderByDiagnosedAtDesc(hamsterId);
-        // }
-        // else if (diseaseId != null) {
-        //     list = hamsterDiseaseRepository.findByDiseaseId(diseaseId);
-        // }
-        // else {
-        //     list = hamsterDiseaseRepository.findAll();
-        // }
+    // public List<HamsterDiseaseResponse> list(Long hamsterId, Long diseaseId) {
+    //     // List<HamsterDisease> list;
+    //     // if (hamsterId != null) {
+    //     //     list = hamsterDiseaseRepository.findByHamsterIdOrderByDiagnosedAtDesc(hamsterId);
+    //     // }
+    //     // else if (diseaseId != null) {
+    //     //     list = hamsterDiseaseRepository.findByDiseaseId(diseaseId);
+    //     // }
+    //     // else {
+    //     //     list = hamsterDiseaseRepository.findAll();
+    //     // }
         
-        // return list.stream().map(HamsterDiseaseService::toResponse).toList();
+    //     // return list.stream().map(HamsterDiseaseService::toResponse).toList();
 
-        return hamsterDiseaseRepository.findByFilters(hamsterId, diseaseId).stream().map(HamsterDiseaseService::toResponse).toList();
+    //     return hamsterDiseaseRepository.findByFilters(hamsterId, diseaseId).stream().map(HamsterDiseaseService::toResponse).toList();
+    // }
+
+    public List<HamsterDiseaseResponse> list(String hamsterName, String diseaseName) {
+        return hamsterDiseaseRepository.findByFilters(normalize(hamsterName), normalize(diseaseName))
+            .stream().map(HamsterDiseaseService::toResponse).toList();
+    }
+
+    private static String normalize(String s) {
+        return (s == null || s.isBlank()) ? null : s.trim();
     }
 
     @Transactional

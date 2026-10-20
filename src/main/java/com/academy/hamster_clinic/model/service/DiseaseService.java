@@ -37,8 +37,10 @@ public class DiseaseService {
         return toResponse(findOrThrow(id));
     }
 
-    public List<DiseaseResponse> list() {
-        return diseaseRepository.findAll().stream().map(DiseaseService::toResponse).toList();
+    public List<DiseaseResponse> list(String name) {
+        List<Disease> diseases = (name == null || name.isBlank()) ? diseaseRepository.findAll() : diseaseRepository.findByNameContainingIgnoreCase(name);
+        
+        return diseases.stream().map(DiseaseService::toResponse).toList();
     }
 
     private Disease findOrThrow(Long id) {

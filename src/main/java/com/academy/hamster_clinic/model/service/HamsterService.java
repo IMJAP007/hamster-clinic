@@ -41,8 +41,14 @@ public class HamsterService {
         return toResponse(findOrThrow(id));
     }
 
-    public List<HamsterResponse> list(Long ownerId) {
-        List<Hamster> hamsters = (ownerId == null) ? hamsterRepository.findAll() : hamsterRepository.findByOwnerId(ownerId);
+    // public List<HamsterResponse> list(Long ownerId) {
+    //     List<Hamster> hamsters = (ownerId == null) ? hamsterRepository.findAll() : hamsterRepository.findByOwnerId(ownerId);
+    //     return hamsters.stream().map(HamsterService::toResponse).toList();
+    // }
+
+    public List<HamsterResponse> list(String ownerFullName) {
+        List<Hamster> hamsters = (ownerFullName == null || ownerFullName.isBlank()) ? hamsterRepository.findAll() : hamsterRepository.findByOwnerFullNameContainingIgnoreCase(ownerFullName.trim());
+
         return hamsters.stream().map(HamsterService::toResponse).toList();
     }
 

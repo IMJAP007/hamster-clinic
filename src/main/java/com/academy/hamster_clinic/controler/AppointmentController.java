@@ -38,15 +38,28 @@ public class AppointmentController {
         return appointmentService.create(req);
     }
 
+    // @GetMapping
+    // @Operation(summary = "Выводит список записей", description = "Можно фильтровать по хомяку или врачу")
+    // public List<AppointmentResponse> list(
+    //     @Parameter(description = "ID доктора") @RequestParam(required = false) Long doctorId, 
+    //     @Parameter(description = "Id хозяина") @RequestParam(required = false) Long ownerId,
+    //     @Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId
+    // ) {
+    //     return appointmentService.list(doctorId, hamsterId, ownerId);
+    // }
+
     @GetMapping
-    @Operation(summary = "Выводит список записей", description = "Можно фильтровать по хомяку или врачу")
+    @Operation(summary = "Вывести список записей", description = "Фильтрация по ФИО врача, ФИО владельца и имени хомяка;")
     public List<AppointmentResponse> list(
-        @Parameter(description = "ID доктора") @RequestParam(required = false) Long doctorId, 
-        @Parameter(description = "Id хозяина") @RequestParam(required = false) Long ownerId,
-        @Parameter(description = "ID хомяка") @RequestParam(required = false) Long hamsterId
-    ) {
-        return appointmentService.list(doctorId, hamsterId, ownerId);
-    }
+        @Parameter(description = "ФИО врача")
+        @RequestParam(required = false) String doctorFullName,
+        @Parameter(description = "ФИО владельца")
+        @RequestParam(required = false) String ownerFullName,
+        @Parameter(description = "Имя хомяка")
+        @RequestParam(required = false) String hamsterName) {
+            return appointmentService.list(doctorFullName, ownerFullName, hamsterName);
+        }
+
 
     @GetMapping("/{id}")
     @Operation(summary = "Выводит конкретную запись", description = "По ID")

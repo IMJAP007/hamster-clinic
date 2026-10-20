@@ -39,12 +39,12 @@ public class OwnerService {
         return toResponse(findOrThrow(id));
     }
 
-    public List<OwnerResponse> list() {
-        return ownerRepository.findAllByOrderByFullNameAsc().stream().map(OwnerService::toResponse).toList();
-    }
+    // public List<OwnerResponse> list() {
+    //     return ownerRepository.findAllByOrderByFullNameAsc().stream().map(OwnerService::toResponse).toList();
+    // }
 
     public List<OwnerResponse> findByFullName(String fullName) {
-        List<Owner> owners = (fullName == null || fullName.isBlank()) ? ownerRepository.findAll() : ownerRepository.findByFullNameContaining(fullName);
+        List<Owner> owners = (fullName == null || fullName.isBlank()) ? ownerRepository.findAll() : ownerRepository.findByFullNameContainingIgnoreCase(fullName);
 
         return owners.stream().map(OwnerService::toResponse).toList();
     }

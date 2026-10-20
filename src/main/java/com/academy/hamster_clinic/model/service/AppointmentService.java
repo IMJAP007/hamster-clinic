@@ -64,22 +64,32 @@ public class AppointmentService {
         return toResponse(findOrThrow(id));
     }
 
-    public List<AppointmentResponse> list(Long doctorId, Long hamsterId, Long ownerId) {
-        // List<Appointment> list;
+    // public List<AppointmentResponse> list(Long doctorId, Long hamsterId, Long ownerId) {
+    //     // List<Appointment> list;
         
-        // if (doctorId != null) {
-        //     list = appointmentRepository.findByDoctorIdOrderByAppointmentDateAsc(doctorId);
-        // }
-        // else if (hamsterId != null) {
-        //     list = appointmentRepository.findByHamsterIdOrderByAppointmentDateAsc(hamsterId);
-        // }
-        // else {
-        //     list = appointmentRepository.findAll();
-        // }
+    //     // if (doctorId != null) {
+    //     //     list = appointmentRepository.findByDoctorIdOrderByAppointmentDateAsc(doctorId);
+    //     // }
+    //     // else if (hamsterId != null) {
+    //     //     list = appointmentRepository.findByHamsterIdOrderByAppointmentDateAsc(hamsterId);
+    //     // }
+    //     // else {
+    //     //     list = appointmentRepository.findAll();
+    //     // }
         
-        // return list.stream().map(AppointmentService::toResponse).toList();
+    //     // return list.stream().map(AppointmentService::toResponse).toList();
 
-        return appointmentRepository.findByFilters(doctorId, hamsterId, ownerId).stream().map(AppointmentService::toResponse).toList();
+    //     return appointmentRepository.findByFilters(doctorId, hamsterId, ownerId).stream().map(AppointmentService::toResponse).toList();
+    // }
+
+    public List<AppointmentResponse> list(String doctorFullName, String ownerFullName, String hamsterName) {
+        
+        return appointmentRepository.findByFilters(normalize(doctorFullName), normalize(ownerFullName), normalize(hamsterName))
+            .stream().map(AppointmentService::toResponse).toList();
+    }
+
+    private static String normalize(String s) {
+        return (s == null || s.isBlank()) ? null : s.trim();
     }
 
     @Transactional

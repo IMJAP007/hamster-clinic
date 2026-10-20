@@ -48,7 +48,7 @@ public class DoctorService {
     }
 
     public List<DoctorResponse> searchByFullName(String fullName) {
-        List<Doctor> doctors = (fullName == null || fullName.isBlank()) ? doctorRepository.findAll() : doctorRepository.findByFullNameContaining(fullName);
+        List<Doctor> doctors = (fullName == null || fullName.isBlank()) ? doctorRepository.findAll() : doctorRepository.findByFullNameContainingIgnoreCase(fullName);
 
         return doctors.stream().map(DoctorService::toResponse).toList();
     }
