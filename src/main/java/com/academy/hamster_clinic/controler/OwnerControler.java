@@ -48,7 +48,7 @@ public class OwnerControler {
 
     @GetMapping
     @Operation(summary = "Вывести владельцев", description = "Можно с фильтрацией по ФИО")
-    public List<OwnerResponse> get(@Parameter(description = "ФИО Владельца") @RequestParam (required = false) String fullName) {
+    public List<OwnerResponse> get(@Parameter(description = "ФИО Владельца", example = "Иванов Иван Иванович") @RequestParam (required = false) String fullName) {
         return ownerService.findByFullName(fullName);
     }
 

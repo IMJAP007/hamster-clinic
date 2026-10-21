@@ -47,7 +47,7 @@ public class DoctorController {
 
     @GetMapping
     @Operation(summary = "Вывести список врачей", description = "Можно с фильтрцией по ФИО")
-    public List<DoctorResponse> filterByFullName(@Parameter(description = "ФИО Врача") @RequestParam (required = false) String fullName) {
+    public List<DoctorResponse> filterByFullName(@Parameter(description = "ФИО Врача", example = "Иванов Иван Иванович") @RequestParam (required = false) String fullName) {
         return doctorService.searchByFullName(fullName);
     }
 

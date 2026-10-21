@@ -39,7 +39,7 @@ public class DiseaseController {
 
     @GetMapping
     @Operation(summary = "Вывести список болезней")
-    public List<DiseaseResponse> list(@Parameter(description = "Наименование болезни") @RequestParam (required = false) String name) {
+    public List<DiseaseResponse> list(@Parameter(description = "Наименование болезни", example = "Простуда") @RequestParam (required = false) String name) {
         return diseaseService.list(name);
     }
 

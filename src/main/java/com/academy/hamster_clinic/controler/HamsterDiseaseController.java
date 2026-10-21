@@ -48,9 +48,9 @@ public class HamsterDiseaseController {
     @Operation(summary = "Вывести список записей о болезнях",
            description = "Фильтрация по имени хомяка и названию болезни")
     public List<HamsterDiseaseResponse> list(
-        @Parameter(description = "Имя хомяка")
+        @Parameter(description = "Имя хомяка", example = "Рыжик")
         @RequestParam(required = false) String hamsterName,
-        @Parameter(description = "Название болезни")
+        @Parameter(description = "Название болезни", example = "Простуда")
         @RequestParam(required = false) String diseaseName) {
         return hamsterDiseaseService.list(hamsterName, diseaseName);
     }

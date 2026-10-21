@@ -48,7 +48,7 @@ public class HamsterController {
 
     @GetMapping
     @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по ФИО владельца")
-    public List<HamsterResponse> list(@Parameter(description = "ФИО владельца") @RequestParam(required = false) String ownerFullName) {
+    public List<HamsterResponse> list(@Parameter(description = "ФИО владельца", example = "Иванов Иван Иванович") @RequestParam(required = false) String ownerFullName) {
         return hamsterService.list(ownerFullName);
     }
 

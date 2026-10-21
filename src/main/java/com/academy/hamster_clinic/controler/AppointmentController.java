@@ -51,11 +51,11 @@ public class AppointmentController {
     @GetMapping
     @Operation(summary = "Вывести список записей", description = "Фильтрация по ФИО врача, ФИО владельца и имени хомяка;")
     public List<AppointmentResponse> list(
-        @Parameter(description = "ФИО врача")
+        @Parameter(description = "ФИО врача", example = "Иванов Иван Иванович")
         @RequestParam(required = false) String doctorFullName,
-        @Parameter(description = "ФИО владельца")
+        @Parameter(description = "ФИО владельца", example = "Иванов Иван Иванович")
         @RequestParam(required = false) String ownerFullName,
-        @Parameter(description = "Имя хомяка")
+        @Parameter(description = "Имя хомяка", example = "Рыжик")
         @RequestParam(required = false) String hamsterName) {
             return appointmentService.list(doctorFullName, ownerFullName, hamsterName);
         }
