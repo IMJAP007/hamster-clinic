@@ -3,6 +3,7 @@ package com.academy.hamster_clinic.controler;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,6 +35,7 @@ public class HamsterController {
     private final HamsterService hamsterService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать хомяка", description = "Создаёт нового хомяка. Нужен хозяин.")
     public HamsterResponse create(@RequestBody @Valid HamsterRequest req) {
@@ -47,24 +49,28 @@ public class HamsterController {
     // }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести список хомяков", description = "Можно с фильтрацией по ФИО владельца")
     public List<HamsterResponse> list(@Parameter(description = "ФИО владельца", example = "Иванов Иван Иванович") @RequestParam(required = false) String ownerFullName) {
         return hamsterService.list(ownerFullName);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести хомяка", description = "По ID")
     public HamsterResponse get(@Parameter(description = "ID хомяка") @PathVariable Long id) {
         return hamsterService.get(id);
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Переименовать хомяка", description = "По ID")
     public HamsterResponse rename(@Parameter(description = "ID хомяка") @PathVariable Long id, @RequestBody @Valid HamsterRenameRequest req) {
         return hamsterService.rename(id, req);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Удалить хомяка", description = "По ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@Parameter(description = "ID хомяка") @PathVariable Long id) {

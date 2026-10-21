@@ -3,6 +3,7 @@ package com.academy.hamster_clinic.controler;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class HamsterDiseaseController {
     private final HamsterDiseaseService hamsterDiseaseService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать запись о диагнозе", description = "Создаёт запись об установке диагноза хомяку. Нужен хомяк, больезнь и дата установки диагноза")
     public HamsterDiseaseResponse create(@RequestBody @Valid HamsterDiseaseRequest req) {
@@ -45,6 +47,7 @@ public class HamsterDiseaseController {
     // }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести список записей о болезнях",
            description = "Фильтрация по имени хомяка и названию болезни")
     public List<HamsterDiseaseResponse> list(
@@ -56,12 +59,14 @@ public class HamsterDiseaseController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести конкретную запись", description = "По ID")
     public HamsterDiseaseResponse get(@Parameter(description = "ID записи") @PathVariable Long id) {
         return hamsterDiseaseService.get(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Удалить запись", description = "По ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@Parameter(description = "ID записи") @PathVariable Long id) {

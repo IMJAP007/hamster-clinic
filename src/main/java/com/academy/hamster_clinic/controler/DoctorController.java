@@ -3,6 +3,7 @@ package com.academy.hamster_clinic.controler;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать врача", description = "Создаёт нового врача. Email должен быть уникальным.")
     public DoctorResponse create(@RequestBody @Valid DoctorRequest req) {
@@ -46,24 +48,28 @@ public class DoctorController {
     // }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Вывести список врачей", description = "Можно с фильтрцией по ФИО")
     public List<DoctorResponse> filterByFullName(@Parameter(description = "ФИО Врача", example = "Иванов Иван Иванович") @RequestParam (required = false) String fullName) {
         return doctorService.searchByFullName(fullName);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Вывести конкретного врача", description = "По ID")
     public DoctorResponse get(@Parameter(description = "ID доктора") @PathVariable Long id) {
         return doctorService.get(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Обновить данные конкретного врача", description = "По ID")
     public DoctorResponse update(@Parameter(description = "ID доктора") @PathVariable Long id, @RequestBody @Valid DoctorRequest req) {
         return doctorService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Удалить врача", description = "По ID")
     public void delete(@Parameter(description = "ID доктора") @PathVariable Long id) {

@@ -3,6 +3,7 @@ package com.academy.hamster_clinic.controler;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class DiseaseController {
     private final DiseaseService diseaseService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать болезнь", description = "Создаёт новую болезнь")
     public DiseaseResponse create(@RequestBody @Valid DiseaseRequest req) {
@@ -38,12 +40,14 @@ public class DiseaseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести список болезней")
     public List<DiseaseResponse> list(@Parameter(description = "Наименование болезни", example = "Простуда") @RequestParam (required = false) String name) {
         return diseaseService.list(name);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     @Operation(summary = "Вывести конкретную болезнь", description = "По ID")
     public DiseaseResponse get(@Parameter(description = "ID болезни") @PathVariable Long id) {
         return diseaseService.get(id);

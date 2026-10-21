@@ -3,6 +3,7 @@ package com.academy.hamster_clinic.controler;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class AppointmentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @Operation(summary = "Создать запись", description = "Создаёт новую запись. Нужен Врач, Хозяин, Хомяк хозяина, Врач на назначенное время должен быть свободен")
     public AppointmentResponse create(@RequestBody @Valid AppointmentRequest req) {
         return appointmentService.create(req);
@@ -49,6 +51,7 @@ public class AppointmentController {
     // }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DOCTOR')")
     @Operation(summary = "Вывести список записей", description = "Фильтрация по ФИО врача, ФИО владельца и имени хомяка;")
     public List<AppointmentResponse> list(
         @Parameter(description = "ФИО врача", example = "Иванов Иван Иванович")
@@ -62,12 +65,14 @@ public class AppointmentController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DOCTOR')")
     @Operation(summary = "Выводит конкретную запись", description = "По ID")
     public AppointmentResponse get(@Parameter(description = "ID записи") @PathVariable Long id) {
         return appointmentService.get(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or (hasRole('DOCTOR') and @appointmentService.isDoctorOfAppointment(authentication.name, #id))")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Удаляет запись", description = "По ID")
     public void cancel(@Parameter(description = "ID записи") @PathVariable Long id) {
