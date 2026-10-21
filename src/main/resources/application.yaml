@@ -23,5 +23,11 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+application:
+  security:
+    jwt:
+      secret-key: SdPvYsuherTtFgzn3ogifQBfSNilyhOeEMltzlmBHBU=
+      expiration: 3600000
+
 server:
   port: 8080
