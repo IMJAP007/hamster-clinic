@@ -28,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public AuthResponse register(RegisterRequest req) {
@@ -48,7 +49,10 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return buildResponse(user, jwtService.generateToken(user));
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = refreshTokenService.createRefreshToken(user, null); // Новое семейство
+
+        return buildResponse(user, accessToken, refreshToken);
     }
 
 
@@ -58,12 +62,26 @@ public class AuthService {
         );
 
         User user = (User) auth.getPrincipal();
-        return buildResponse(user, jwtService.generateToken(user));
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = refreshTokenService.createRefreshToken(user, null); // Новое семейство
+
+        return buildResponse(user, accessToken, refreshToken);
     }
 
-    private AuthResponse buildResponse(User user, String token) {
+    @Transactional
+    public AuthResponse refresh(String rawRefreshToken) {
+        RefreshTokenService.RefreshResult result = refreshTokenService.rotateRefreshToken(rawRefreshToken);
+
+        User user = result.user();
+        String newAccessToken = jwtService.generateToken(user);
+
+        return buildResponse(user, newAccessToken, result.newRefreshToken());
+    }
+
+    private AuthResponse buildResponse(User user, String accessToken, String refreshToken) {
         return new AuthResponse(
-                token,
+                accessToken, 
+                refreshToken, 
                 "Bearer",
                 user.getUsername(),
                 user.getFullName(),

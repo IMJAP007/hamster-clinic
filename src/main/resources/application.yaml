@@ -27,7 +27,7 @@ application:
   security:
     jwt:
       secret-key: SdPvYsuherTtFgzn3ogifQBfSNilyhOeEMltzlmBHBU=
-      expiration: 3600000
+      expiration: 900000
 
 server:
   port: 8080

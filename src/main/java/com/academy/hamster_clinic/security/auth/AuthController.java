@@ -30,4 +30,10 @@ public class AuthController {
     public AuthResponse login(@RequestBody @Valid LoginRequest req) {
         return authService.login(req);
     }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Обновить access-токен")
+    public AuthResponse refresh(@RequestBody RefreshRequest request) {
+        return authService.refresh(request.refreshToken());
+    }
 }
