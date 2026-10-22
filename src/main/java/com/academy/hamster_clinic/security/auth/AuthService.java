@@ -1,12 +1,13 @@
-package com.academy.hamster_clinic.auth;
+package com.academy.hamster_clinic.security.auth;
 
-import com.academy.hamster_clinic.auth.dto.*;
 import com.academy.hamster_clinic.exception.BusinessException;
 import com.academy.hamster_clinic.model.entity.Role;
 import com.academy.hamster_clinic.model.entity.User;
 import com.academy.hamster_clinic.model.repository.RoleRepository;
 import com.academy.hamster_clinic.model.repository.UserRepository;
 import com.academy.hamster_clinic.security.JwtService;
+import com.academy.hamster_clinic.security.auth.dto.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

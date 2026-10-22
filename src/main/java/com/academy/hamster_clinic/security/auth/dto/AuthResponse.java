@@ -1,4 +1,4 @@
-package com.academy.hamster_clinic.auth.dto;
+package com.academy.hamster_clinic.security.auth.dto;
 
 import java.util.List;
 

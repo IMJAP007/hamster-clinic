@@ -1,12 +1,13 @@
-package com.academy.hamster_clinic.auth;
+package com.academy.hamster_clinic.security.auth;
 
-import com.academy.hamster_clinic.auth.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import com.academy.hamster_clinic.security.auth.dto.*;
 
 @RestController
 @RequestMapping("/api/auth")
