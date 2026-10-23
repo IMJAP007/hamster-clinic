@@ -38,6 +38,9 @@ public class Hamster {
     @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
 
+    @Column(name = "image_url", length = 2048)
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;

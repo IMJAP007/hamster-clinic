@@ -7,5 +7,6 @@ public record HamsterResponse(
         String name,
         Long ownerId,
         String ownerFullName,
+        String imageUrl,
         OffsetDateTime createdAt
 ) {}

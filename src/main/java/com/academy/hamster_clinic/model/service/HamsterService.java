@@ -33,6 +33,7 @@ public class HamsterService {
         
         h.setName(req.name());
         h.setOwner(owner);
+        h.setImageUrl(req.imageUrl() == null || req.imageUrl().isBlank() ? null : req.imageUrl().trim());
         
         return toResponse(hamsterRepository.save(h));
     }
@@ -71,6 +72,6 @@ public class HamsterService {
     }
 
     private static HamsterResponse toResponse(Hamster h) {
-        return new HamsterResponse(h.getId(), h.getName(), h.getOwner().getId(), h.getOwner().getFullName(), h.getCreatedAt());
+        return new HamsterResponse(h.getId(), h.getName(), h.getOwner().getId(), h.getOwner().getFullName(), h.getImageUrl(), h.getCreatedAt());
     }
 }
