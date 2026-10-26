@@ -1,0 +1,77 @@
+package com.academy.hamster_clinic.model.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.academy.hamster_clinic.exception.ResourceNotFoundException;
+import com.academy.hamster_clinic.model.dto.HamsterRenameRequest;
+import com.academy.hamster_clinic.model.dto.HamsterRequest;
+import com.academy.hamster_clinic.model.dto.HamsterResponse;
+import com.academy.hamster_clinic.model.entity.Hamster;
+import com.academy.hamster_clinic.model.entity.Owner;
+import com.academy.hamster_clinic.model.repository.HamsterRepository;
+import com.academy.hamster_clinic.model.repository.OwnerRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class HamsterService {
+
+    private final HamsterRepository hamsterRepository;
+    private final OwnerRepository ownerRepository;
+
+        @Transactional
+    public HamsterResponse create(HamsterRequest req) {
+        Owner owner = ownerRepository.findById(req.ownerId()).orElseThrow(
+            () -> new ResourceNotFoundException("Хозяин не найден: id = " + req.ownerId()));
+        
+            Hamster h = new Hamster();
+        
+        h.setName(req.name());
+        h.setOwner(owner);
+        h.setImageUrl(req.imageUrl() == null || req.imageUrl().isBlank() ? null : req.imageUrl().trim());
+        
+        return toResponse(hamsterRepository.save(h));
+    }
+
+    public HamsterResponse get(Long id) {
+        return toResponse(findOrThrow(id));
+    }
+
+    // public List<HamsterResponse> list(Long ownerId) {
+    //     List<Hamster> hamsters = (ownerId == null) ? hamsterRepository.findAll() : hamsterRepository.findByOwnerId(ownerId);
+    //     return hamsters.stream().map(HamsterService::toResponse).toList();
+    // }
+
+    public List<HamsterResponse> list(String ownerFullName) {
+        List<Hamster> hamsters = (ownerFullName == null || ownerFullName.isBlank()) ? hamsterRepository.findAll() : hamsterRepository.findByOwnerFullNameContainingIgnoreCase(ownerFullName.trim());
+
+        return hamsters.stream().map(HamsterService::toResponse).toList();
+    }
+
+    @Transactional
+    public HamsterResponse rename(Long id, HamsterRenameRequest req) {
+        Hamster h = findOrThrow(id);
+        
+        h.setName(req.name());
+        
+        return toResponse(h);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        hamsterRepository.delete(findOrThrow(id));
+    }
+
+    private Hamster findOrThrow(Long id) {
+        return hamsterRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Хомяк не найден: id = " + id));
+    }
+
+    private static HamsterResponse toResponse(Hamster h) {
+        return new HamsterResponse(h.getId(), h.getName(), h.getOwner().getId(), h.getOwner().getFullName(), h.getImageUrl(), h.getCreatedAt());
+    }
+}

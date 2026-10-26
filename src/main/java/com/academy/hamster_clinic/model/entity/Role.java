@@ -1,0 +1,25 @@
+package com.academy.hamster_clinic.model.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "roles")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String name;
+
+    public Role(String name) {
+        this.name = name;
+    }
+}

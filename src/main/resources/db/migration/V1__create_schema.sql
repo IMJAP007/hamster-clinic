@@ -15,6 +15,7 @@ CREATE TABLE hamsters (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     owner_id BIGINT NOT NULL,
+    image_url VARCHAR(2048),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     
     CONSTRAINT fk_hamsters_owner FOREIGN KEY (owner_id) REFERENCES owners (id) ON DELETE RESTRICT
